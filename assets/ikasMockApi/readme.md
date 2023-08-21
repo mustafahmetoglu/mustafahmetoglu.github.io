@@ -1,1 +1,0 @@
-direkt bunu fetchle kanka ikas api call aynen bunu dönüyor zaten
