@@ -1,1 +1,65 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><link rel="icon" href="/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="description" content="Web site created using create-react-app"/><link rel="apple-touch-icon" href="/logo192.png"/><link rel="manifest" href="/manifest.json"/><title>React App</title><script defer="defer" src="/static/js/main.50bba532.js"></script><link href="/static/css/main.e96fb223.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+    
+    <script >
+      function LookAR(usdzSrc) {
+        console.log('usdzSource',usdzSrc)
+        const anchor = document.createElement('a');
+        anchor.setAttribute('rel', 'ar');
+        anchor.appendChild(document.createElement('img'));
+        anchor.setAttribute('href', usdzSrc);
+        anchor.click();
+      }
+      function checkButton() {    
+        var getSelectedValue = document.querySelector(   
+            'input[name="selectedModel"]:checked');   
+            
+        if(getSelectedValue != null) {   
+            console.log(getSelectedValue.value   
+                + " season is selected");   
+
+                LookAR(getSelectedValue.value)
+                
+        }   
+        else {   
+            console.log('not selected')
+        }   
+    }    
+
+    </script>
+    <script type="module" crossorigin src="/assets/index-1d6614af.js"></script>
+    <link rel="stylesheet" href="/assets/index-f4edd6ae.css">
+  </head>
+  <body>
+    <div id="app"></div>
+    <head lang="en">
+      <meta charset="utf-8">
+      <title>My first three.js app</title>
+      <style>
+        body { margin: 0; }
+      </style>
+    </head>
+    <body>
+      <script src="/scripts.js" ></script>
+      <button onclick="checkButton()" style="border-radius: 15px;
+      background: var(--blue, #0A84FF);
+      /* System Ultra Thin Material */
+      backdrop-filter: blur(16px);
+      position: fixed;
+      margin-left: auto;
+      margin-right: auto;
+      left: 0;
+      right: 0;
+      text-align: center;
+      bottom:20px;
+      width: 90%;
+      height: 50px;
+      align-self: center;" class="ARButton" ><text>AR görüntülemeyi başlat</text></button>
+    </body>
+  </body>
+</html>
