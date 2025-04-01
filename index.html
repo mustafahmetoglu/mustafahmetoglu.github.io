@@ -30,70 +30,97 @@
         .result-card:hover {
             transform: translateY(-5px);
         }
-        .image-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        .image-container img {
-            border-radius: 4px;
-            object-fit: cover;
-        }
-        .input-image {
-            width: 150px;
-            height: 150px;
-        }
-        .cropped-image {
-            width: 100px;
-            height: 100px;
-        }
-        .match-image {
-            width: 100px;
-            height: 100px;
-        }
         .card-body {
             padding: 20px;
         }
+        .image-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .image-container > div {
+            text-align: center;
+            flex: 1;
+            margin: 0 5px;
+        }
+        .input-image {
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: 5px;
+        }
+        .cropped-image, .match-image {
+            max-width: 100px;
+            max-height: 100px;
+            border-radius: 5px;
+        }
         .celebrity-name {
-            font-size: 24px;
+            font-size: 1.5rem;
             font-weight: bold;
             margin-bottom: 5px;
         }
         .celebrity-era {
-            font-size: 16px;
+            font-size: 1rem;
             color: #6c757d;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         .timestamp {
-            font-size: 14px;
+            font-size: 0.8rem;
             color: #adb5bd;
+            text-align: right;
         }
-        .pagination-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .loading {
+        .loading-container {
             text-align: center;
-            padding: 40px;
-            font-size: 18px;
-            color: #6c757d;
+            padding: 20px;
         }
-        .error {
+        .error-container {
             background-color: #f8d7da;
             color: #721c24;
             padding: 15px;
             border-radius: 5px;
             margin-bottom: 20px;
+            display: none;
         }
         .no-results {
             text-align: center;
-            padding: 40px;
-            font-size: 18px;
-            color: #6c757d;
+            padding: 30px;
+            background-color: #e9ecef;
+            border-radius: 5px;
         }
-        .api-url-form {
+        .pagination {
+            justify-content: center;
+        }
+        .api-url-container {
             margin-bottom: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+        }
+        .table-view {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .table-image {
+            max-width: 80px;
+            max-height: 80px;
+            border-radius: 4px;
+        }
+        .table-view th {
+            background-color: #f8f9fa;
+        }
+        .view-toggle-container {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+        .results-count {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #e2f3ff;
+            border-radius: 5px;
+            color: #0d6efd;
+            font-weight: 500;
         }
     </style>
 </head>
@@ -101,32 +128,56 @@
     <div class="container">
         <div class="header">
             <h1>Celebrity Lookalike Results</h1>
-            <p>View all your celebrity lookalike matches</p>
+            <p>View your previously analyzed images and their celebrity matches</p>
         </div>
-
-        <div class="api-url-form">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">API Configuration</h5>
-                    <div class="mb-3">
-                        <label for="apiUrl" class="form-label">API URL</label>
-                        <input type="text" class="form-control" id="apiUrl" placeholder="https://your-api-url.com">
-                    </div>
-                    <button id="saveApiUrl" class="btn btn-primary">Save</button>
-                </div>
+        
+        <div class="api-url-container">
+            <div class="input-group">
+                <span class="input-group-text">API URL</span>
+                <input type="text" id="apiUrl" class="form-control" placeholder="Enter your API URL here">
+                <button class="btn btn-primary" id="saveApiUrl">Save</button>
             </div>
         </div>
-
-        <div id="errorContainer" class="error" style="display: none;"></div>
         
-        <div id="loadingContainer" class="loading">
+        <div class="view-toggle-container">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-outline-primary active" id="cardViewBtn">Card View</button>
+                <button type="button" class="btn btn-outline-primary" id="tableViewBtn">Table View</button>
+            </div>
+        </div>
+        
+        <div id="errorContainer" class="error-container"></div>
+        
+        <div id="loadingContainer" class="loading-container">
             <div class="spinner-border text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
             <p>Loading results...</p>
         </div>
         
-        <div id="resultsContainer"></div>
+        <div id="cardViewContainer">
+            <div id="resultsContainer"></div>
+        </div>
+        
+        <div id="tableViewContainer" style="display: none;">
+            <div class="table-view">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Input</th>
+                            <th>Cropped</th>
+                            <th>Celebrity</th>
+                            <th>Era</th>
+                            <th>Match</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsTableBody">
+                        <!-- Table rows will be added here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
         
         <div id="noResultsContainer" class="no-results" style="display: none;">
             <p>No results found. Make sure your API is running and accessible.</p>
@@ -139,14 +190,17 @@
                 </ul>
             </nav>
         </div>
+        
+        <div id="resultsCountContainer" class="results-count" style="display: none;"></div>
     </div>
 
     <script>
         // Configuration
         let apiUrl = 'https://crop-face-748457143894.us-central1.run.app';
-        const resultsPerPage = 5;
+        const resultsPerPage = 100; // Increased to a large number to show all results
         let currentPage = 1;
         let totalResults = 0;
+        let currentView = 'card'; // 'card' or 'table'
 
         // DOM Elements
         const apiUrlInput = document.getElementById('apiUrl');
@@ -154,31 +208,57 @@
         const errorContainer = document.getElementById('errorContainer');
         const loadingContainer = document.getElementById('loadingContainer');
         const resultsContainer = document.getElementById('resultsContainer');
+        const resultsTableBody = document.getElementById('resultsTableBody');
         const noResultsContainer = document.getElementById('noResultsContainer');
         const paginationContainer = document.getElementById('paginationContainer');
+        const cardViewBtn = document.getElementById('cardViewBtn');
+        const tableViewBtn = document.getElementById('tableViewBtn');
+        const cardViewContainer = document.getElementById('cardViewContainer');
+        const tableViewContainer = document.getElementById('tableViewContainer');
+        const resultsCountContainer = document.getElementById('resultsCountContainer');
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             // Set the API URL from localStorage if available
-            if (apiUrl) {
-                apiUrlInput.value = apiUrl;
+            apiUrlInput.value = apiUrl;
+            
+            // Add event listeners
+            saveApiUrlButton.addEventListener('click', saveApiUrl);
+            cardViewBtn.addEventListener('click', () => switchView('card'));
+            tableViewBtn.addEventListener('click', () => switchView('table'));
+            
+            // Fetch results
+            fetchResults();
+        });
+
+        // Save API URL to localStorage
+        function saveApiUrl() {
+            const newApiUrl = apiUrlInput.value.trim();
+            if (newApiUrl) {
+                apiUrl = newApiUrl;
+                localStorage.setItem('celebifyApiUrl', apiUrl);
                 fetchResults();
             } else {
-                // Show API URL form if not configured
-                loadingContainer.style.display = 'none';
+                showError('Please enter a valid API URL');
             }
+        }
 
-            // Save API URL button
-            saveApiUrlButton.addEventListener('click', () => {
-                apiUrl = apiUrlInput.value.trim();
-                if (apiUrl) {
-                    localStorage.setItem('celebifyApiUrl', apiUrl);
-                    fetchResults();
-                } else {
-                    showError('Please enter a valid API URL');
-                }
-            });
-        });
+        // Switch between card and table views
+        function switchView(view) {
+            currentView = view;
+            
+            if (view === 'card') {
+                cardViewBtn.classList.add('active');
+                tableViewBtn.classList.remove('active');
+                cardViewContainer.style.display = 'block';
+                tableViewContainer.style.display = 'none';
+            } else {
+                cardViewBtn.classList.remove('active');
+                tableViewBtn.classList.add('active');
+                cardViewContainer.style.display = 'none';
+                tableViewContainer.style.display = 'block';
+            }
+        }
 
         // Fetch results from the API
         function fetchResults() {
@@ -186,7 +266,9 @@
             errorContainer.style.display = 'none';
             loadingContainer.style.display = 'block';
             resultsContainer.innerHTML = '';
+            resultsTableBody.innerHTML = '';
             noResultsContainer.style.display = 'none';
+            resultsCountContainer.style.display = 'none';
             
             // Calculate offset
             const offset = (currentPage - 1) * resultsPerPage;
@@ -210,8 +292,10 @@
                     
                     if (data.results && data.results.length > 0) {
                         renderResults(data.results);
+                        renderTableResults(data.results);
                         totalResults = data.pagination.total;
                         renderPagination(data.pagination);
+                        renderResultsCount(data.pagination);
                     } else {
                         noResultsContainer.style.display = 'block';
                     }
@@ -230,32 +314,48 @@
                 });
         }
 
-        // Render results
+        // Render results as cards
         function renderResults(results) {
+            console.log("Rendering results:", results);
+            
             results.forEach(result => {
                 const analysisData = result.analysis;
-                const timestamp = new Date(result.created || Date.now()).toLocaleString();
+                console.log("Analysis data:", analysisData);
                 
-                // Create result card
-                const resultCard = document.createElement('div');
-                resultCard.className = 'result-card';
+                const timestamp = new Date(result.created || Date.now()).toLocaleString();
                 
                 // Get image URLs
                 let inputImageUrl = '';
                 let croppedImageUrl = '';
                 let matchImageUrl = '';
                 
-                // Check if storage_urls exists in the analysis
+                // Check if storage_urls exists in the analysis data
                 if (analysisData.storage_urls) {
-                    // Convert GCS URLs to HTTP URLs (this is a placeholder - you'll need to adapt this)
+                    console.log("Storage URLs:", analysisData.storage_urls);
                     inputImageUrl = convertGcsUrl(analysisData.storage_urls.input_image);
                     croppedImageUrl = convertGcsUrl(analysisData.storage_urls.cropped_image);
+                    console.log("Converted URLs - Input:", inputImageUrl, "Cropped:", croppedImageUrl);
+                } else if (result.storage_urls) {
+                    // Try getting from the result object directly
+                    console.log("Result Storage URLs:", result.storage_urls);
+                    inputImageUrl = convertGcsUrl(result.storage_urls.input_image);
+                    croppedImageUrl = convertGcsUrl(result.storage_urls.cropped_image);
+                    console.log("Converted URLs from result - Input:", inputImageUrl, "Cropped:", croppedImageUrl);
+                } else {
+                    console.log("No storage_urls found in the analysis data or result");
                 }
                 
                 // Get the best match image if available
                 if (analysisData.images && analysisData.images.length > 0) {
                     matchImageUrl = analysisData.images[0].url;
+                    console.log("Match image URL:", matchImageUrl);
+                } else {
+                    console.log("No match images found");
                 }
+                
+                // Create result card
+                const resultCard = document.createElement('div');
+                resultCard.className = 'result-card';
                 
                 // Build the card HTML
                 resultCard.innerHTML = `
@@ -263,78 +363,135 @@
                         <div class="image-container">
                             <div>
                                 <p class="text-center mb-1">Input</p>
-                                <img src="${inputImageUrl}" alt="Input Image" class="input-image" onerror="this.src=''" style="display: ${inputImageUrl ? 'block' : 'none'}">
+                                ${inputImageUrl ? 
+                                  `<img src="${inputImageUrl}" alt="Input Image" class="input-image" onerror="this.outerHTML='<div class=\'text-danger\'>Corrupted Image</div>'">` : 
+                                  `<div class="text-danger">Corrupted Image</div>`}
                             </div>
                             <div>
                                 <p class="text-center mb-1">Cropped</p>
-                                <img src="${croppedImageUrl}" alt="Cropped Face" class="cropped-image" onerror="this.src=''" style="display: ${croppedImageUrl ? 'block' : 'none'}">
+                                ${croppedImageUrl ? 
+                                  `<img src="${croppedImageUrl}" alt="Cropped Face" class="cropped-image" onerror="this.outerHTML='<div class=\'text-danger\'>Corrupted Image</div>'">` : 
+                                  `<div class="text-danger">Corrupted Image</div>`}
                             </div>
                             <div>
                                 <p class="text-center mb-1">Match</p>
-                                <img src="${matchImageUrl}" alt="Best Match" class="match-image" onerror="this.src=''" style="display: ${matchImageUrl ? 'block' : 'none'}">
+                                ${matchImageUrl ? 
+                                  `<img src="${matchImageUrl}" alt="Best Match" class="match-image" onerror="this.outerHTML='<div class=\'text-danger\'>Corrupted Image</div>'">` : 
+                                  `<div class="text-danger">Corrupted Image</div>`}
                             </div>
                         </div>
                         <div class="celebrity-name">${analysisData.celebrity?.name || 'Unknown Celebrity'}</div>
                         <div class="celebrity-era">${analysisData.celebrity?.era || ''}</div>
-                        <div class="timestamp">Processed: ${timestamp}</div>
+                        <div class="timestamp">Analyzed on: ${timestamp}</div>
                     </div>
                 `;
                 
+                // Add the card to the container
                 resultsContainer.appendChild(resultCard);
+            });
+        }
+        
+        // Render results as table rows
+        function renderTableResults(results) {
+            console.log("Rendering table results:", results);
+            
+            results.forEach(result => {
+                const analysisData = result.analysis;
+                const timestamp = new Date(result.created || Date.now()).toLocaleString();
+                
+                // Get image URLs
+                let inputImageUrl = '';
+                let croppedImageUrl = '';
+                let matchImageUrl = '';
+                
+                // Check if storage_urls exists in the analysis data
+                if (analysisData.storage_urls) {
+                    inputImageUrl = convertGcsUrl(analysisData.storage_urls.input_image);
+                    croppedImageUrl = convertGcsUrl(analysisData.storage_urls.cropped_image);
+                } else if (result.storage_urls) {
+                    // Try getting from the result object directly
+                    inputImageUrl = convertGcsUrl(result.storage_urls.input_image);
+                    croppedImageUrl = convertGcsUrl(result.storage_urls.cropped_image);
+                }
+                
+                // Get the best match image if available
+                if (analysisData.images && analysisData.images.length > 0) {
+                    matchImageUrl = analysisData.images[0].url;
+                }
+                
+                // Create table row
+                const tableRow = document.createElement('tr');
+                
+                // Build the row HTML
+                tableRow.innerHTML = `
+                    <td>${timestamp}</td>
+                    <td>${inputImageUrl ? 
+                        `<img src="${inputImageUrl}" alt="Input" class="table-image" onerror="this.outerHTML='<span class=\'text-danger\'>Corrupted Image</span>'">` : 
+                        `<span class="text-danger">Corrupted Image</span>`}</td>
+                    <td>${croppedImageUrl ? 
+                        `<img src="${croppedImageUrl}" alt="Cropped" class="table-image" onerror="this.outerHTML='<span class=\'text-danger\'>Corrupted Image</span>'">` : 
+                        `<span class="text-danger">Corrupted Image</span>`}</td>
+                    <td>${analysisData.celebrity?.name || 'Unknown'}</td>
+                    <td>${analysisData.celebrity?.era || ''}</td>
+                    <td>${matchImageUrl ? 
+                        `<img src="${matchImageUrl}" alt="Match" class="table-image" onerror="this.outerHTML='<span class=\'text-danger\'>Corrupted Image</span>'">` : 
+                        `<span class="text-danger">Corrupted Image</span>`}</td>
+                `;
+                
+                // Add the row to the table
+                resultsTableBody.appendChild(tableRow);
             });
         }
 
         // Render pagination
         function renderPagination(pagination) {
-            const totalPages = Math.ceil(pagination.total / resultsPerPage);
+            paginationContainer.innerHTML = '';
             
-            if (totalPages <= 1) {
-                paginationContainer.innerHTML = '';
-                return;
-            }
-            
-            let paginationHTML = '';
+            const totalPages = Math.ceil(pagination.total / pagination.limit);
             
             // Previous button
-            paginationHTML += `
-                <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-                    <a class="page-link" href="#" data-page="${currentPage - 1}" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-            `;
+            const prevLi = document.createElement('li');
+            prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+            prevLi.innerHTML = `<a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>`;
+            if (currentPage > 1) {
+                prevLi.addEventListener('click', () => {
+                    currentPage--;
+                    fetchResults();
+                });
+            }
+            paginationContainer.appendChild(prevLi);
             
             // Page numbers
             for (let i = 1; i <= totalPages; i++) {
-                paginationHTML += `
-                    <li class="page-item ${i === currentPage ? 'active' : ''}">
-                        <a class="page-link" href="#" data-page="${i}">${i}</a>
-                    </li>
-                `;
+                const pageLi = document.createElement('li');
+                pageLi.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                pageLi.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                pageLi.addEventListener('click', () => {
+                    currentPage = i;
+                    fetchResults();
+                });
+                paginationContainer.appendChild(pageLi);
             }
             
             // Next button
-            paginationHTML += `
-                <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-                    <a class="page-link" href="#" data-page="${currentPage + 1}" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            `;
-            
-            paginationContainer.innerHTML = paginationHTML;
-            
-            // Add event listeners to pagination links
-            document.querySelectorAll('.page-link').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const page = parseInt(e.target.closest('.page-link').dataset.page);
-                    if (page && page !== currentPage && page > 0 && page <= totalPages) {
-                        currentPage = page;
-                        fetchResults();
-                    }
+            const nextLi = document.createElement('li');
+            nextLi.className = `page-item ${currentPage === totalPages || totalPages === 0 ? 'disabled' : ''}`;
+            nextLi.innerHTML = `<a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>`;
+            if (currentPage < totalPages) {
+                nextLi.addEventListener('click', () => {
+                    currentPage++;
+                    fetchResults();
                 });
-            });
+            }
+            paginationContainer.appendChild(nextLi);
+        }
+
+        // Render results count
+        function renderResultsCount(pagination) {
+            const totalPages = Math.ceil(pagination.total / pagination.limit);
+            const resultsCountText = `Showing ${pagination.offset + 1} - ${Math.min(pagination.offset + pagination.limit, pagination.total)} of ${pagination.total} results (Page ${currentPage} of ${totalPages})`;
+            resultsCountContainer.textContent = resultsCountText;
+            resultsCountContainer.style.display = 'block';
         }
 
         // Helper function to convert GCS URLs to HTTP URLs
