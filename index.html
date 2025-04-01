@@ -241,9 +241,9 @@
                 resultCard.className = 'result-card';
                 
                 // Get image URLs
-                let inputImageUrl = '#';
-                let croppedImageUrl = '#';
-                let matchImageUrl = '#';
+                let inputImageUrl = '';
+                let croppedImageUrl = '';
+                let matchImageUrl = '';
                 
                 // Check if storage_urls exists in the analysis
                 if (analysisData.storage_urls) {
@@ -263,15 +263,15 @@
                         <div class="image-container">
                             <div>
                                 <p class="text-center mb-1">Input</p>
-                                <img src="${inputImageUrl}" alt="Input Image" class="input-image" onerror="this.src='https://via.placeholder.com/150?text=Not+Available'">
+                                <img src="${inputImageUrl}" alt="Input Image" class="input-image" onerror="this.src=''" style="display: ${inputImageUrl ? 'block' : 'none'}">
                             </div>
                             <div>
                                 <p class="text-center mb-1">Cropped</p>
-                                <img src="${croppedImageUrl}" alt="Cropped Face" class="cropped-image" onerror="this.src='https://via.placeholder.com/100?text=Not+Available'">
+                                <img src="${croppedImageUrl}" alt="Cropped Face" class="cropped-image" onerror="this.src=''" style="display: ${croppedImageUrl ? 'block' : 'none'}">
                             </div>
                             <div>
                                 <p class="text-center mb-1">Match</p>
-                                <img src="${matchImageUrl}" alt="Best Match" class="match-image" onerror="this.src='https://via.placeholder.com/100?text=Not+Available'">
+                                <img src="${matchImageUrl}" alt="Best Match" class="match-image" onerror="this.src=''" style="display: ${matchImageUrl ? 'block' : 'none'}">
                             </div>
                         </div>
                         <div class="celebrity-name">${analysisData.celebrity?.name || 'Unknown Celebrity'}</div>
@@ -338,21 +338,29 @@
         }
 
         // Helper function to convert GCS URLs to HTTP URLs
-        // Note: This is a placeholder. You'll need to adapt this based on your actual setup.
         function convertGcsUrl(gcsUrl) {
-            if (!gcsUrl) return '#';
+            if (!gcsUrl) return '';
             
-            // For now, we'll just return a placeholder
-            // In a real implementation, you might need to use a proxy or signed URLs
-            return 'https://via.placeholder.com/150?text=GCS+Image';
+            // For GCS URLs, we need to proxy them through our API
+            if (gcsUrl.startsWith('gs://')) {
+                // Extract the path part of the GCS URL
+                const match = gcsUrl.match(/gs:\/\/([^\/]+)\/(.+)/);
+                if (match) {
+                    const bucket = match[1];
+                    const path = match[2];
+                    
+                    // Use our API endpoint to serve the image
+                    return `${apiUrl}/get-image?bucket=${bucket}&path=${encodeURIComponent(path)}`;
+                }
+            }
             
-            // Example of how you might convert a GCS URL:
-            // const bucketName = 'celebify-images';
-            // const match = gcsUrl.match(/gs:\/\/celebify-images\/(.+)/);
-            // if (match && match[1]) {
-            //     return `https://storage.googleapis.com/${bucketName}/${match[1]}`;
-            // }
-            // return '#';
+            // For HTTP URLs, use them directly
+            if (gcsUrl.startsWith('http')) {
+                return gcsUrl;
+            }
+            
+            // Return empty string for invalid URLs
+            return '';
         }
 
         // Show error message
