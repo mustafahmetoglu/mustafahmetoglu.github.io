@@ -1,236 +1,365 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MK1XTEZMQQ"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-MK1XTEZMQQ');
-  </script>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Dopefolio</title>
-
-  <link rel="stylesheet" href="css/style.css" />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700;900&display=swap"
-    rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celebrity Lookalike Results Viewer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .header {
+            background-color: #343a40;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .result-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        .result-card:hover {
+            transform: translateY(-5px);
+        }
+        .image-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .image-container img {
+            border-radius: 4px;
+            object-fit: cover;
+        }
+        .input-image {
+            width: 150px;
+            height: 150px;
+        }
+        .cropped-image {
+            width: 100px;
+            height: 100px;
+        }
+        .match-image {
+            width: 100px;
+            height: 100px;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .celebrity-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .celebrity-era {
+            font-size: 16px;
+            color: #6c757d;
+            margin-bottom: 15px;
+        }
+        .timestamp {
+            font-size: 14px;
+            color: #adb5bd;
+        }
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 18px;
+            color: #6c757d;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            font-size: 18px;
+            color: #6c757d;
+        }
+        .api-url-form {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
-
 <body>
-  <header class="header">
-    <div class="header__content">
-      <div class="header__main">
-        <ul class="header__links">
-          <li class="header__link-wrapper">
-            <a href="./index.html#" class="header__link"> Home </a>
-          </li>
-          <li class="header__link-wrapper">
-            <a href="./index.html#about" class="header__link">About </a>
-          </li>
-          <li class="header__link-wrapper">
-            <a href="./index.html#projects" class="header__link">
-              Projects
-            </a>
-          </li>
-
-        </ul>
-      </div>
-    </div>
-  </header>
-  <section class="home-hero">
-
-    <div class="home-hero__title">
-      <h1 class="heading-primary">Mustafa</h1>
-      <h1 class="heading-secondary">Software Developer</h1>
-    </div>
-    <div class="home-hero__title2">
-      <h1 class="heading2-subheading">/ THIS IS ME</h1>
-      <h1 class="heading2-primary">Experienced Developer from Istanbul</h1>
-      <h1 class="heading2-secondary">Designed and developed plenty of web & mobile applications passionately over the
-        last 4+ years</h1>
-      <div class="home-hero__cta">
-        <a href="./#projects" class="btn btn--bg">Projects</a>
-      </div>
-    </div>
-
-    <div class="home-hero__content">
-      <img class="img-memoji" src="./assets/png/memoji.png" alt="">
-    </div>
-
-  </section>
-  <section id="about" class="about sec-pad">
-    <div class="main-container">
-      <h2 class="heading heading-sec heading-sec__mb-med">
-        <span class="heading-sec__main">About Me</span>
-        <span class="heading-sec__sub">
-          Designed and developed plenty of web & mobile applications passionately for the last 4+ years
-        </span>
-      </h2>
-      <div class="about__content">
-        <div class="about__content-main">
-          <h3 class="about__content-title">Get to know me!</h3>
-          <div class="about__content-details">
-            <p class="about__content-details-para">
-              Hey! It's
-              <strong>Mustafa Ahmetoğlu</strong>
-              and I'm a <strong> Software Developer </strong> located in
-              Istanbul. I've done
-              <strong> remote </strong>
-              projects for companies, and collaborated
-              with talented people to create
-              <strong>digital products </strong>
-              for both business and consumer use.
-            </p>
-            <p class="about__content-details-para">
-
-            </p>
-          </div>
+    <div class="container">
+        <div class="header">
+            <h1>Celebrity Lookalike Results</h1>
+            <p>View all your celebrity lookalike matches</p>
         </div>
-        <div class="about__content-skills">
-          <h3 class="about__content-title">My Skills</h3>
-          <div class="skills">
-            <div class="skills__skill">JavaScript</div>
-            <div class="skills__skill">React</div>
-            <div class="skills__skill">React Native</div>
-            <div class="skills__skill">Node.js</div>
-            <div class="skills__skill">Three.js</div>
-            <div class="skills__skill">R3F</div>
-            <div class="skills__skill">Vue.js</div>
-            <div class="skills__skill">IOS</div>
-            <div class="skills__skill">Python</div>
-            <div class="skills__skill">C++</div>
-            <div class="skills__skill">SQL</div>
-            <div class="skills__skill">.NET Core</div>
-            <div class="skills__skill">SCSS</div>
-            <div class="skills__skill">GIT</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section id="projects" class="projects sec-pad">
-    <div class="main-container">
-      <h2 class="heading heading-sec heading-sec__mb-bg">
-        <span class="heading-sec__main">Projects</span>
-        <span class="heading-sec__sub">
-          Some of my favorite projects, from 2019 to present
-        </span>
-      </h2>
 
-      <div class="projects__content">
-
-        <div class="projects__row">
-          <div class="projects__row-img-cont">
-            <img src="./assets/png/dreamer.png" alt="Software Screenshot" class="projects__row-img" loading="lazy" />
-          </div>
-          <div class="projects__row-content">
-            <h3 class="projects__row-content-title">Dreamery AI Kids</h3>
-            <p class="projects__row-content-desc">
-              Our proprietary project, Dreamery AI Kids app, aims to contribute to children's development by generating artificial intelligence-supported stories.
-            </p>
-              <div class="skills">
-                <div class="skills__skill">JavaScript</div>
-                <div class="skills__skill">React Native</div>
-                <div class="skills__skill">Go</div>
-
+        <div class="api-url-form">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">API Configuration</h5>
+                    <div class="mb-3">
+                        <label for="apiUrl" class="form-label">API URL</label>
+                        <input type="text" class="form-control" id="apiUrl" placeholder="https://your-api-url.com">
+                    </div>
+                    <button id="saveApiUrl" class="btn btn-primary">Save</button>
+                </div>
             </div>
-          </div>
-          
         </div>
-        <div class="projects__row">
-          <div class="projects__row-img-cont">
-            <img src="./assets/png/yuzmax.png" alt="Software Screenshot" class="projects__row-img" loading="lazy" />
-          </div>
-          <div class="projects__row-content">
-            <h3 class="projects__row-content-title">Yüz Max AI</h3>
-            <p class="projects__row-content-desc">
-              Our proprietary project, Yüz Max AI app, currently in the publishing process, is designed to analyze users' face shapes and generate personalized tips.
-            </p>
-            <div class="skills">
-              <div class="skills__skill">JavaScript</div>
-              <div class="skills__skill">React Native</div>
-              <div class="skills__skill">Go</div>
 
-          </div>
-          </div>
-        </div>
-        <div class="projects__row">
-          <div class="projects__row-img-cont">
-            <img src="./assets/png/entrepreneur.png" alt="Software Screenshot" class="projects__row-img"
-              loading="lazy" />
-          </div>
-          <div class="projects__row-content">
-            <h3 class="projects__row-content-title">Fornium Entrepreneur</h3>
-            <p class="projects__row-content-desc">
-The Fornium Entrepreneur app, also published under the name "Mağazan Olsun Girişimci" in the Turkish market, facilitates entrepreneurs in monitoring their stores.
-            </p>
-            <div class="skills">
-              <div class="skills__skill">JavaScript</div>
-              <div class="skills__skill">React Native</div>
-          </div>
-          </div>
-        </div>
-        <div class="projects__row">
-          <div class="projects__row-img-cont">
-            <img src="./assets/png/tedarikci.png" alt="Software Screenshot" class="projects__row-img"
-              loading="lazy" />
-          </div>
-          <div class="projects__row-content">
-            <h3 class="projects__row-content-title">Mağazan Olsun Tedarikçi</h3>
-            <p class="projects__row-content-desc">
-              The Mağazan Olsun Tedarikçi app, also published under the name Fornium Supplier in the UK market, facilitates communication between suppliers and stores.
-            </p>
-            <div class="skills">
-              <div class="skills__skill">React Native</div>
-          </div>
-          </div>
-        </div>
-        <div class="projects__row">
-          <div class="projects__row-img-cont">
-            <img src="./assets/png/majolika.png" alt="Software Screenshot" class="projects__row-img"
-              loading="lazy" />
-          </div>
-          <div class="projects__row-content">
-            <h3 class="projects__row-content-title">Majolika XR</h3>
-            <p class="projects__row-content-desc">
-              The Majolika XR project is a web application where users can select a rug from a virtual 3D store via their browser and try out the selected rug in their homes using WebAR.
-            </p>
-            <div class="skills">
-              <div class="skills__skill">React</div>
-              <div class="skills__skill">Three.js</div>
-              <div class="skills__skill">R3F</div>
+        <div id="errorContainer" class="error" style="display: none;"></div>
+        
+        <div id="loadingContainer" class="loading">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
             </div>
-          </div>
+            <p>Loading results...</p>
         </div>
-        <div class="projects__row">
-          <div class="projects__row-img-cont">
-            <img src="./assets/png/xys.png" alt="Software Screenshot" class="projects__row-img"
-              loading="lazy" />
-          </div>
-          <div class="projects__row-content">
-            <h3 class="projects__row-content-title">XYS Online Sınav</h3>
-            <p class="projects__row-content-desc">
-              XYS Online Sınav is a online practice exam app that helps students solve exams from their phone. 
-            </p>
-            <div class="skills__skill">React Native</div>
-
-          </div>
+        
+        <div id="resultsContainer"></div>
+        
+        <div id="noResultsContainer" class="no-results" style="display: none;">
+            <p>No results found. Make sure your API is running and accessible.</p>
         </div>
-      </div>
+        
+        <div class="pagination-container">
+            <nav aria-label="Results pagination">
+                <ul class="pagination" id="paginationContainer">
+                    <!-- Pagination will be added here by JavaScript -->
+                </ul>
+            </nav>
+        </div>
     </div>
-  </section>
 
+    <script>
+        // Configuration
+        let apiUrl = 'https://crop-face-748457143894.us-central1.run.app';
+        const resultsPerPage = 5;
+        let currentPage = 1;
+        let totalResults = 0;
 
+        // DOM Elements
+        const apiUrlInput = document.getElementById('apiUrl');
+        const saveApiUrlButton = document.getElementById('saveApiUrl');
+        const errorContainer = document.getElementById('errorContainer');
+        const loadingContainer = document.getElementById('loadingContainer');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const noResultsContainer = document.getElementById('noResultsContainer');
+        const paginationContainer = document.getElementById('paginationContainer');
 
-  <script src="./index.js"></script>
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set the API URL from localStorage if available
+            if (apiUrl) {
+                apiUrlInput.value = apiUrl;
+                fetchResults();
+            } else {
+                // Show API URL form if not configured
+                loadingContainer.style.display = 'none';
+            }
+
+            // Save API URL button
+            saveApiUrlButton.addEventListener('click', () => {
+                apiUrl = apiUrlInput.value.trim();
+                if (apiUrl) {
+                    localStorage.setItem('celebifyApiUrl', apiUrl);
+                    fetchResults();
+                } else {
+                    showError('Please enter a valid API URL');
+                }
+            });
+        });
+
+        // Fetch results from the API
+        function fetchResults() {
+            // Reset UI
+            errorContainer.style.display = 'none';
+            loadingContainer.style.display = 'block';
+            resultsContainer.innerHTML = '';
+            noResultsContainer.style.display = 'none';
+            
+            // Calculate offset
+            const offset = (currentPage - 1) * resultsPerPage;
+            
+            // Fetch data from API
+            fetch(`${apiUrl}/view-results?limit=${resultsPerPage}&offset=${offset}`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                },
+                mode: 'cors' // Explicitly request CORS mode
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    loadingContainer.style.display = 'none';
+                    
+                    if (data.results && data.results.length > 0) {
+                        renderResults(data.results);
+                        totalResults = data.pagination.total;
+                        renderPagination(data.pagination);
+                    } else {
+                        noResultsContainer.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    loadingContainer.style.display = 'none';
+                    
+                    // Provide more helpful error messages for CORS issues
+                    if (error.message.includes('NetworkError') || 
+                        error.message.includes('Failed to fetch') ||
+                        error.message.includes('CORS')) {
+                        showError(`CORS Error: The API server at ${apiUrl} is not allowing cross-origin requests. Please make sure CORS is enabled on your server or try opening this page from the same domain as your API.`);
+                    } else {
+                        showError(`Error fetching results: ${error.message}`);
+                    }
+                });
+        }
+
+        // Render results
+        function renderResults(results) {
+            results.forEach(result => {
+                const analysisData = result.analysis;
+                const timestamp = new Date(result.created || Date.now()).toLocaleString();
+                
+                // Create result card
+                const resultCard = document.createElement('div');
+                resultCard.className = 'result-card';
+                
+                // Get image URLs
+                let inputImageUrl = '#';
+                let croppedImageUrl = '#';
+                let matchImageUrl = '#';
+                
+                // Check if storage_urls exists in the analysis
+                if (analysisData.storage_urls) {
+                    // Convert GCS URLs to HTTP URLs (this is a placeholder - you'll need to adapt this)
+                    inputImageUrl = convertGcsUrl(analysisData.storage_urls.input_image);
+                    croppedImageUrl = convertGcsUrl(analysisData.storage_urls.cropped_image);
+                }
+                
+                // Get the best match image if available
+                if (analysisData.images && analysisData.images.length > 0) {
+                    matchImageUrl = analysisData.images[0].url;
+                }
+                
+                // Build the card HTML
+                resultCard.innerHTML = `
+                    <div class="card-body">
+                        <div class="image-container">
+                            <div>
+                                <p class="text-center mb-1">Input</p>
+                                <img src="${inputImageUrl}" alt="Input Image" class="input-image" onerror="this.src='https://via.placeholder.com/150?text=Not+Available'">
+                            </div>
+                            <div>
+                                <p class="text-center mb-1">Cropped</p>
+                                <img src="${croppedImageUrl}" alt="Cropped Face" class="cropped-image" onerror="this.src='https://via.placeholder.com/100?text=Not+Available'">
+                            </div>
+                            <div>
+                                <p class="text-center mb-1">Match</p>
+                                <img src="${matchImageUrl}" alt="Best Match" class="match-image" onerror="this.src='https://via.placeholder.com/100?text=Not+Available'">
+                            </div>
+                        </div>
+                        <div class="celebrity-name">${analysisData.celebrity?.name || 'Unknown Celebrity'}</div>
+                        <div class="celebrity-era">${analysisData.celebrity?.era || ''}</div>
+                        <div class="timestamp">Processed: ${timestamp}</div>
+                    </div>
+                `;
+                
+                resultsContainer.appendChild(resultCard);
+            });
+        }
+
+        // Render pagination
+        function renderPagination(pagination) {
+            const totalPages = Math.ceil(pagination.total / resultsPerPage);
+            
+            if (totalPages <= 1) {
+                paginationContainer.innerHTML = '';
+                return;
+            }
+            
+            let paginationHTML = '';
+            
+            // Previous button
+            paginationHTML += `
+                <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+                    <a class="page-link" href="#" data-page="${currentPage - 1}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            `;
+            
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                paginationHTML += `
+                    <li class="page-item ${i === currentPage ? 'active' : ''}">
+                        <a class="page-link" href="#" data-page="${i}">${i}</a>
+                    </li>
+                `;
+            }
+            
+            // Next button
+            paginationHTML += `
+                <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+                    <a class="page-link" href="#" data-page="${currentPage + 1}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            `;
+            
+            paginationContainer.innerHTML = paginationHTML;
+            
+            // Add event listeners to pagination links
+            document.querySelectorAll('.page-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = parseInt(e.target.closest('.page-link').dataset.page);
+                    if (page && page !== currentPage && page > 0 && page <= totalPages) {
+                        currentPage = page;
+                        fetchResults();
+                    }
+                });
+            });
+        }
+
+        // Helper function to convert GCS URLs to HTTP URLs
+        // Note: This is a placeholder. You'll need to adapt this based on your actual setup.
+        function convertGcsUrl(gcsUrl) {
+            if (!gcsUrl) return '#';
+            
+            // For now, we'll just return a placeholder
+            // In a real implementation, you might need to use a proxy or signed URLs
+            return 'https://via.placeholder.com/150?text=GCS+Image';
+            
+            // Example of how you might convert a GCS URL:
+            // const bucketName = 'celebify-images';
+            // const match = gcsUrl.match(/gs:\/\/celebify-images\/(.+)/);
+            // if (match && match[1]) {
+            //     return `https://storage.googleapis.com/${bucketName}/${match[1]}`;
+            // }
+            // return '#';
+        }
+
+        // Show error message
+        function showError(message) {
+            errorContainer.textContent = message;
+            errorContainer.style.display = 'block';
+        }
+    </script>
 </body>
-
 </html>
